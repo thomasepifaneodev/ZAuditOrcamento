@@ -1,0 +1,111 @@
+object dmDados: TdmDados
+  Height = 480
+  Width = 640
+  object fdQueryOrcamento: TFDQuery
+    Connection = fdConnection
+    SQL.Strings = (
+      'WITH codproduto_data AS ('
+      'SELECT '
+      #9'antigo codproduto, '
+      #9'valorchave'
+      'FROM vauditoria_campos'
+      'WHERE data BETWEEN '#39'01-01-2020'#39' AND '#39'16-05-2024'#39
+      'AND campo = '#39'codproduto'#39
+      'AND operacao = '#39'DELETE'#39
+      'AND tabela = '#39'orcamentosprod'#39
+      '),'
+      'nome_data AS ('
+      'SELECT '
+      #9'REPLACE(antigo, '#39'\"'#39', '#39#39') AS nome, '
+      #9'valorchave'
+      'FROM vauditoria_campos'
+      'WHERE data BETWEEN '#39'01-01-2020'#39' AND '#39'16-05-2024'#39
+      'AND campo = '#39'nome'#39
+      'AND operacao = '#39'DELETE'#39
+      'AND tabela = '#39'orcamentosprod'#39
+      '),'
+      'qtde_data AS ('
+      'SELECT '
+      #9'REPLACE(antigo, '#39'\"'#39', '#39#39') AS qtde, '
+      #9'valorchave'
+      'FROM vauditoria_campos'
+      'wHERE data BETWEEN '#39'01-01-2020'#39' AND '#39'16-05-2024'#39
+      'AND campo = '#39'qtde'#39
+      'AND operacao = '#39'DELETE'#39
+      'AND tabela = '#39'orcamentosprod'#39
+      '),'
+      'valorunitario_data AS ('
+      'SELECT '
+      #9'REPLACE(antigo, '#39'\"'#39', '#39#39') AS valorunitario, '
+      #9'valorchave'
+      'FROM vauditoria_campos'
+      'WHERE data BETWEEN '#39'01-01-2020'#39' AND '#39'16-05-2024'#39
+      'AND campo = '#39'valorunitario'#39
+      'AND operacao = '#39'DELETE'#39
+      'AND tabela = '#39'orcamentosprod'#39
+      '),'
+      'valortotal_data AS ('
+      'SELECT '
+      #9'REPLACE(antigo, '#39'\"'#39', '#39#39') AS valortotal, '
+      #9'valorchave'
+      'FROM vauditoria_campos'
+      'WHERE data BETWEEN '#39'01-01-2020'#39' AND '#39'16-05-2024'#39'  '
+      'AND campo = '#39'valortotal'#39
+      'AND operacao = '#39'DELETE'#39
+      'AND tabela = '#39'orcamentosprod'#39
+      '),'
+      'codorcamento_data AS ('
+      'SELECT '
+      #9'REPLACE(antigo, '#39'\"'#39', '#39#39') AS codorcamento, '
+      #9'valorchave'
+      'FROM vauditoria_campos'
+      'WHERE data BETWEEN '#39'01-01-2020'#39' AND '#39'16-05-2024'#39'  '
+      'AND campo = '#39'codorcamento'#39
+      'AND operacao = '#39'DELETE'#39
+      'AND tabela = '#39'orcamentosprod'#39
+      ')'
+      'SELECT '
+      #9'codorcamento::integer, '
+      #9'codproduto::integer, '
+      #9'nome::VARCHAR(200), '
+      #9'ROUND(qtde::numeric, 2) qtde, '
+      #9'ROUND(valorunitario::numeric, 2)::MONEY AS valorunitario, '
+      #9'ROUND(valortotal::numeric, 2)::MONEY AS valortotal '
+      'FROM codproduto_data'
+      
+        'LEFT JOIN nome_data ON codproduto_data.valorchave = nome_data.va' +
+        'lorchave'
+      
+        'LEFT JOIN qtde_data ON codproduto_data.valorchave = qtde_data.va' +
+        'lorchave'
+      
+        'LEFT JOIN valorunitario_data ON codproduto_data.valorchave = val' +
+        'orunitario_data.valorchave'
+      
+        'LEFT JOIN valortotal_data ON codproduto_data.valorchave = valort' +
+        'otal_data.valorchave'
+      
+        'LEFT JOIN codorcamento_data ON codproduto_data.valorchave = codo' +
+        'rcamento_data.valorchave'
+      'ORDER BY codorcamento;')
+    Left = 299
+    Top = 240
+  end
+  object fdPgLink: TFDPhysPgDriverLink
+    VendorHome = 'C:\Users\Usuario\Documents\ZOrcamento\Exe'
+    Left = 384
+    Top = 240
+  end
+  object fdConnection: TFDConnection
+    Params.Strings = (
+      'Database=base_ajm'
+      'User_Name=postgres'
+      'Password=postzeus2011'
+      'Server=127.0.0.1'
+      'DriverID=PG')
+    Connected = True
+    LoginPrompt = False
+    Left = 200
+    Top = 240
+  end
+end

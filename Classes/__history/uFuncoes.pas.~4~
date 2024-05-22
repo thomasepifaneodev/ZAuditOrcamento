@@ -1,0 +1,39 @@
+unit uFuncoes;
+
+interface
+
+uses
+  Vcl.DBGrids;
+
+procedure AutoAdjustDBGridColumns(DBGrid: TDBGrid);
+
+implementation
+
+procedure AutoAdjustDBGridColumns(DBGrid: TDBGrid);
+var
+  i, j, ColumnWidth, MaxWidth: Integer;
+  Column: TColumn;
+  FieldValue: string;
+begin
+
+  for i := 0 to DBGrid.Columns.Count - 1 do
+  begin
+    Column := DBGrid.Columns[i];
+    MaxWidth := DBGrid.Canvas.TextWidth(Column.Title.Caption);
+
+    for j := 0 to DBGrid.DataSource.DataSet.RecordCount - 1 do
+    begin
+      DBGrid.DataSource.DataSet.RecNo := j + 1;
+      FieldValue := DBGrid.DataSource.DataSet.Fields[i].AsString;
+      ColumnWidth := DBGrid.Canvas.TextWidth(FieldValue) + 10;
+
+      if ColumnWidth > MaxWidth then
+        MaxWidth := ColumnWidth;
+    end;
+    Column.Width := MaxWidth;
+  end;
+end;
+
+end.
+
+

@@ -1,0 +1,73 @@
+object frmLogin: TfrmLogin
+  Left = 0
+  Top = 0
+  Caption = 'Login'
+  ClientHeight = 442
+  ClientWidth = 300
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  Position = poScreenCenter
+  TextHeight = 15
+  object lblUsuario: TLabeledEdit
+    Left = 50
+    Top = 171
+    Width = 200
+    Height = 35
+    BevelInner = bvNone
+    BevelOuter = bvNone
+    BorderStyle = bsNone
+    EditLabel.Width = 3
+    EditLabel.Height = 35
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -21
+    Font.Name = 'Segoe UI Semibold'
+    Font.Style = [fsBold]
+    LabelPosition = lpLeft
+    ParentFont = False
+    TabOrder = 0
+    Text = ''
+    TextHint = 'Usu'#225'rio'
+  end
+  object lblSenha: TLabeledEdit
+    Left = 50
+    Top = 260
+    Width = 200
+    Height = 35
+    BevelInner = bvNone
+    BevelOuter = bvNone
+    BorderStyle = bsNone
+    EditLabel.Width = 3
+    EditLabel.Height = 35
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -21
+    Font.Name = 'Segoe UI Semibold'
+    Font.Style = [fsBold]
+    LabelPosition = lpLeft
+    ParentFont = False
+    PasswordChar = '*'
+    TabOrder = 1
+    Text = ''
+    TextHint = 'Senha'
+  end
+  object btnEntrar: TButton
+    Left = 100
+    Top = 344
+    Width = 100
+    Height = 35
+    Caption = 'Entrar'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 2
+    OnClick = btnEntrarClick
+  end
+end

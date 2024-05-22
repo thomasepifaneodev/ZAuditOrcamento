@@ -1,0 +1,43 @@
+unit uFuncoes;
+
+interface
+
+uses
+  Vcl.DBGrids;
+
+procedure AutoFitDBGridColumns(DBGrid: TDBGrid; const SpecialColIndex: Integer = 2; const SpecialColMultiplier: Integer = 3);
+
+implementation
+
+procedure AutoFitDBGridColumns(DBGrid: TDBGrid; const SpecialColIndex: Integer = 2; const SpecialColMultiplier: Integer = 3);
+var
+  TotalWidth, ColWidth, SpecialColWidth, RemainingWidth, i, RegularColsCount: Integer;
+begin
+  // Certifique-se de que existem colunas no DBGrid
+  if DBGrid.Columns.Count = 0 then Exit;
+
+  // Calcular a largura total disponível (sem contar com a barra de rolagem vertical)
+  TotalWidth := DBGrid.ClientWidth;
+
+  // Contar as colunas regulares, exceto a especial
+  RegularColsCount := DBGrid.Columns.Count - 1;
+
+  // Calcular a largura da coluna especial (3 vezes a largura de uma coluna regular)
+  SpecialColWidth := (TotalWidth * SpecialColMultiplier) div (SpecialColMultiplier + RegularColsCount);
+
+  // Calcular a largura das colunas regulares
+  ColWidth := (TotalWidth - SpecialColWidth) div RegularColsCount;
+
+  // Ajustar a largura de cada coluna
+  for i := 0 to DBGrid.Columns.Count - 1 do
+  begin
+    if i = SpecialColIndex then
+      DBGrid.Columns[i].Width := SpecialColWidth
+    else
+      DBGrid.Columns[i].Width := ColWidth;
+  end;
+end;
+
+end.
+
+

@@ -1,0 +1,37 @@
+unit uFuncoes;
+
+interface
+
+uses
+  Vcl.DBGrids;
+
+procedure AutoAdjustDBGridColumns(DBGrid: TDBGrid);
+
+implementation
+
+procedure AutoAdjustDBGridColumns(DBGrid: TDBGrid);
+var
+  TotalWidth, ColWidth, RemainingWidth, i: Integer;
+begin
+  // Certifique-se de que existem colunas no DBGrid
+  if DBGrid.Columns.Count = 0 then Exit;
+
+  // Calcular a largura total disponível (sem contar com a barra de rolagem vertical)
+  TotalWidth := DBGrid.ClientWidth;
+
+  // Distribuir a largura igualmente entre todas as colunas
+  ColWidth := TotalWidth div DBGrid.Columns.Count;
+
+  // Ajustar a largura de cada coluna
+  for i := 0 to DBGrid.Columns.Count - 1 do
+  begin
+    if i = DBGrid.Columns.Count - 1 then
+      // A última coluna ocupa o espaço restante para ajustar perfeitamente
+      DBGrid.Columns[i].Width := TotalWidth - (ColWidth * i)
+    else
+      DBGrid.Columns[i].Width := ColWidth;
+  end;
+end;
+end.
+
+

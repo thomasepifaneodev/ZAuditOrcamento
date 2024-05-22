@@ -1,0 +1,48 @@
+unit Orcamento.View.TelaLogin;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, Vcl.ExtCtrls, uConexao, Orcamento.Model.Conexao;
+
+type
+  TfrmLogin = class(TForm)
+    btnEntrar: TButton;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    procedure btnEntrarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmLogin: TfrmLogin;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmLogin.btnEntrarClick(Sender: TObject);
+begin
+if (lblUsuario.Text = '') or (lblSenha.Text = '')	 then
+  MessageDlg('Informe usuário e senha!', mtWarning, [mbOk], 0)
+  else
+  begin
+    try
+      LoginUser(lblUsuario.Text, lblSenha.Text);
+
+    if dmDados.fdConnection.Connected then
+    begin
+      Close;
+    end;
+  except on e: Exception do
+  begin
+    MessageDlg('Não foi possível conectar. Verifique as configurações!', mtWarning, [mbOk], 0);
+  end;
+  end;
+  end;
+end;
+end.

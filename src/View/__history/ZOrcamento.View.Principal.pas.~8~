@@ -1,0 +1,41 @@
+unit ZOrcamento.View.Principal;
+
+interface
+
+uses
+  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
+  FMX.Controls.Presentation, FMX.StdCtrls, System.Rtti, FMX.Grid.Style,
+  FMX.ScrollBox, FMX.Grid, FMX.ListView.Types, FMX.ListView.Appearances,
+  FMX.ListView.Adapters.Base, FMX.ListView;
+
+type
+  TfrmPrincipal = class(TForm)
+    pnlTop: TPanel;
+    pnlBottom: TPanel;
+    pnlCenter: TPanel;
+    StyleBookPnl: TStyleBook;
+    btnBuscar: TCornerButton;
+    btnExportar: TCornerButton;
+    btnExit: TCornerButton;
+    dbGridPrincipal: TGrid;
+    colCodProduto: TColumn;
+    colCodOrcamento: TGlyphColumn;
+    colNomeProd: TStringColumn;
+    colQtdeItem: TFloatColumn;
+    colVlUnitario: TCurrencyColumn;
+    colVlTotal: TCurrencyColumn;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPrincipal: TfrmPrincipal;
+
+implementation
+
+{$R *.fmx}
+
+end.
