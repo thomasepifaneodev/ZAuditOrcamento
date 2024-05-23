@@ -26,9 +26,9 @@ begin
   for i := 0 to DBGrid.Columns.Count - 1 do
   begin
     if i = ColunaIndex then
-      DBGrid.Columns[i].Width := SpecialColWidth
+      DBGrid.Columns[i].Width := SpecialColWidth + 7
     else
-      DBGrid.Columns[i].Width := ColWidth - 1;
+      DBGrid.Columns[i].Width := ColWidth - 5;
   end;
 end;
 

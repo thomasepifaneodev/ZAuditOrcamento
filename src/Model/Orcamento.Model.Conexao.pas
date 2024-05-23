@@ -20,7 +20,8 @@ type
   private
     { Private declarations }
   public
-    procedure ConsultaOrcamento;
+    procedure ConsultaOrcamento(DatInicial, DatFinal:  string);
+    procedure ConsultaOrcamentoGeral();
     { Public declarations }
 
   end;
@@ -38,11 +39,16 @@ implementation
 
 { TdmDados }
 
-procedure TdmDados.ConsultaOrcamento;
+procedure TdmDados.ConsultaOrcamento(DatInicial, DatFinal:  string);
+
 begin
   try
     fdCreateFunction.Open();
+
+    fdQueryOrcamento.SQL.Clear;
+    fdQueryOrcamento.SQL.Text := 'SELECT * FROM orcamentosexcluidos('+ '''' + DatInicial + '''' + ', ' + '''' + DatFinal + ''''+ ') ORDER BY codorcamento;';
     fdQueryOrcamento.Open();
+
   except on e : Exception do
   begin
     ShowMessage(e.Message);
@@ -51,6 +57,20 @@ begin
 
 end;
 
+procedure TdmDados.ConsultaOrcamentoGeral;
+begin
+try
+    fdCreateFunction.Open();
 
+    fdQueryOrcamento.SQL.Clear;
+    fdQueryOrcamento.SQL.Text := 'SELECT * FROM orcamentosexcluidos((SELECT MIN(data) FROM vauditoria), (SELECT MAX(data) FROM vauditoria))';
+    fdQueryOrcamento.Open();
+
+  except on e : Exception do
+  begin
+    ShowMessage(e.Message);
+  end;
+  end;
+end;
 
 end.

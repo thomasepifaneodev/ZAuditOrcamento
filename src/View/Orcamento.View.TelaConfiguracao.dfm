@@ -1,6 +1,8 @@
 object frmConfig: TfrmConfig
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
   Caption = 'Configura'#231#227'o'
   ClientHeight = 380
   ClientWidth = 299
@@ -12,6 +14,7 @@ object frmConfig: TfrmConfig
   Font.Style = []
   Position = poScreenCenter
   StyleName = 'Windows'
+  OnShow = FormShow
   TextHeight = 15
   object lblIp: TLabeledEdit
     Left = 50
@@ -37,6 +40,7 @@ object frmConfig: TfrmConfig
     ParentFont = False
     TabOrder = 0
     Text = ''
+    OnKeyPress = lblIpKeyPress
   end
   object lblPorta: TLabeledEdit
     Left = 50
@@ -64,6 +68,7 @@ object frmConfig: TfrmConfig
     ParentFont = False
     TabOrder = 1
     Text = ''
+    OnKeyPress = lblPortaKeyPress
   end
   object lblBase: TLabeledEdit
     Left = 50
@@ -89,6 +94,7 @@ object frmConfig: TfrmConfig
     ParentFont = False
     TabOrder = 2
     Text = ''
+    OnKeyPress = lblBaseKeyPress
   end
   object btnSalvarConfig: TButton
     Left = 100
@@ -103,6 +109,7 @@ object frmConfig: TfrmConfig
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 3
+    TabStop = False
     OnClick = btnSalvarConfigClick
   end
 end

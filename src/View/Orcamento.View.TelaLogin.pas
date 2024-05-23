@@ -4,15 +4,22 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, Vcl.ExtCtrls, uConexao, Orcamento.Model.Conexao;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, Vcl.ExtCtrls, uConexao, Orcamento.Model.Conexao,
+  Vcl.Menus, Orcamento.View.TelaConfiguracao, VCLTee.TeCanvas, VCLTee.TeePenDlg,
+  System.ImageList, Vcl.ImgList;
 
 type
   TfrmLogin = class(TForm)
     btnEntrar: TButton;
     edtUsuario: TEdit;
     edtSenha: TEdit;
+    menuDatabase: TButtonPen;
+    imgList: TImageList;
     procedure btnEntrarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure menuDatabaseClick(Sender: TObject);
+    procedure edtUsuarioKeyPress(Sender: TObject; var Key: Char);
+    procedure edtSenhaKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -46,9 +53,35 @@ if (edtUsuario.Text = '') or (edtSenha.Text = '')	 then
   end;
   end;
 end;
+
+procedure TfrmLogin.edtUsuarioKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    edtSenha.SetFocus;
+  end;
+end;
+
+procedure TfrmLogin.edtSenhaKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    btnEntrarClick(Sender);
+  end;
+end;
+
 procedure TfrmLogin.FormShow(Sender: TObject);
 begin
   edtUsuario.SetFocus;
 end;
 
+procedure TfrmLogin.menuDatabaseClick(Sender: TObject);
+begin
+  frmConfig := TFrmConfig.Create(nil);
+    try
+      frmConfig.ShowModal();
+    finally
+      FreeAndNil(frmConfig);
+end;
+end;
 end.

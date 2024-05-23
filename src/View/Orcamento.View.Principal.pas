@@ -11,7 +11,8 @@ uses
   FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
   Datasnap.DBClient, FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool,
   FireDAC.Phys, FireDAC.Phys.PG, FireDAC.Phys.PGDef, FireDAC.VCLUI.Wait, Orcamento.Model.Conexao,
-  Orcamento.View.TelaConfiguracao, Orcamento.View.TelaLogin, uLib, uConexao;
+  Orcamento.View.TelaConfiguracao, Orcamento.View.TelaLogin, uLib, uConexao,
+  Vcl.Mask, System.ImageList, Vcl.ImgList;
 
 type
   TfrmPrincipal = class(TForm)
@@ -27,9 +28,22 @@ type
     btnExport: TSpeedButton;
     dbGridPrincipal: TDBGrid;
     dataSource: TDataSource;
+    pnlDatas: TPanel;
+    edtDataInicial: TLabeledEdit;
+    edtDataFinal: TLabeledEdit;
+    imgList: TImageList;
+    pnlBusca: TPanel;
+    edtSource: TEdit;
     procedure btnBuscarClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure edtDataInicialExit(Sender: TObject);
+    procedure edtDataInicialEnter(Sender: TObject);
+    procedure edtDataFinalEnter(Sender: TObject);
+    procedure edtDataFinalExit(Sender: TObject);
+    procedure edtDataInicialKeyPress(Sender: TObject; var Key: Char);
+    procedure edtDataFinalKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -45,10 +59,86 @@ implementation
 
 procedure TfrmPrincipal.btnBuscarClick(Sender: TObject);
 begin
-  dmDados.ConsultaOrcamento;
-  AutoFitDBGridColumns(dbGridPrincipal);
+  pnlBottom.SetFocus;
+  if (edtDataInicial.Text = '') or (edtDataFinal.Text = '')	 then
+  begin
+    //Não faz nada!!!
+  end
+  else
+  begin
+    if MessageDlg('A consulta será efetuada no intervalo de datas ' + edtDataInicial.Text + ' a ' + edtDataFinal.Text, TMsgDlgType.mtConfirmation, mbOKCancel, 0) = MB_OKCANCEL then
+    begin
+      dmDados.ConsultaOrcamento(edtDataInicial.Text, edtDataFinal.Text);
+      AutoFitDBGridColumns(dbGridPrincipal);
+      edtSource.Visible := True;
+    end
+    else
+    begin
+      edtDataFinal.SetFocus;
+    end;
+  end;
 end;
 
+procedure TfrmPrincipal.edtDataInicialEnter(Sender: TObject);
+begin
+  edtDataInicial.EditMask := '';
+  edtDataInicial.MaxLength := 8;
+  edtDataInicial.NumbersOnly := True
+end;
+
+procedure TfrmPrincipal.edtDataInicialExit(Sender: TObject);
+begin
+  if edtDataInicial.GetTextLen = 8 then
+  begin
+    edtDataInicial.EditMask := '!99/99/0000;1;_';
+    edtDataInicial.TextHint := DateToStr(Now());
+  end
+  else
+  begin
+    if edtDataInicial.GetTextLen <> 8 then
+    MessageDlg('Data inicial não informada ou inválida, preencha corretamente!', mtInformation, [mbOk], 0);
+    edtDataInicial.SetFocus;
+  end;
+end;
+
+procedure TfrmPrincipal.edtDataInicialKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    edtDataFinal.Text := '';
+    edtDataFinal.SetFocus;
+  end;
+end;
+
+procedure TfrmPrincipal.edtDataFinalEnter(Sender: TObject);
+begin
+  edtDataFinal.EditMask := '';
+  edtDataFinal.MaxLength := 8;
+  edtDataFinal.NumbersOnly := True
+end;
+
+procedure TfrmPrincipal.edtDataFinalExit(Sender: TObject);
+begin
+  if edtDataFinal.GetTextLen = 8 then
+  begin
+    edtDataFinal.EditMask := '!99/99/0000;1;_';
+  end
+  else
+  begin
+    if edtDataFinal.GetTextLen <> 8 then
+    MessageDlg('Data final não informada ou inválida, preencha corretamente!', mtInformation, [mbOk], 0);
+    edtDataFinal.SetFocus;
+  end;
+
+end;
+
+procedure TfrmPrincipal.edtDataFinalKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    pnlButtonBuscar.SetFocus;
+  end;
+end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
@@ -77,7 +167,6 @@ begin
       except
       on e: Exception do
       begin
-        ShowMessage(PWideChar('Test' + e.Message));
         FreeAndNil(frmLogin);
       end;
     end;
@@ -88,4 +177,9 @@ begin
   AutoFitDBGridColumns(dbGridPrincipal);
 end;
 
+procedure TfrmPrincipal.FormShow(Sender: TObject);
+begin
+  edtDataInicial.SetFocus;
+  edtSource.Visible := False;
+end;
 end.

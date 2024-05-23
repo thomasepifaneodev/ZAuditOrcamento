@@ -13,6 +13,10 @@ type
     lblBase: TLabeledEdit;
     btnSalvarConfig: TButton;
     procedure btnSalvarConfigClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure lblIpKeyPress(Sender: TObject; var Key: Char);
+    procedure lblPortaKeyPress(Sender: TObject; var Key: Char);
+    procedure lblBaseKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -38,4 +42,35 @@ begin
   end;
   end;
 end;
+procedure TfrmConfig.FormShow(Sender: TObject);
+begin
+  lblIp.Text := GetValorIni(ExtractFilePath(Application.ExeName) + 'ZOrcamento.ini', 'CONFIGURACAO', 'IP');
+  lblPorta.Text := GetValorIni(ExtractFilePath(Application.ExeName) + 'ZOrcamento.ini', 'CONFIGURACAO', 'PORTA');
+  lblBase.Text := GetValorIni(ExtractFilePath(Application.ExeName) + 'ZOrcamento.ini', 'CONFIGURACAO', 'BASE');
+end;
+
+procedure TfrmConfig.lblIpKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    lblPorta.SetFocus;
+  end;
+end;
+
+procedure TfrmConfig.lblPortaKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    lblBase.SetFocus;
+  end;
+end;
+
+procedure TfrmConfig.lblBaseKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    btnSalvarConfigClick(Sender);
+  end;
+end;
+
 end.

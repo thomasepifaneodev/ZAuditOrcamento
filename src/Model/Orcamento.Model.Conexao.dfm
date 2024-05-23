@@ -4,9 +4,7 @@ object dmDados: TdmDados
   object fdQueryOrcamento: TFDQuery
     Connection = fdConnection
     SQL.Strings = (
-      
-        'SELECT * FROM orcamentosexcluidos('#39'01-01-2020'#39', '#39'21-05-2024'#39') OR' +
-        'DER BY codorcamento')
+      '')
     Left = 299
     Top = 240
   end
