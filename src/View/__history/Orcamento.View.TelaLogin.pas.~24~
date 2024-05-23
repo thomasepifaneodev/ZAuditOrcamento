@@ -1,0 +1,87 @@
+unit Orcamento.View.TelaLogin;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, Vcl.ExtCtrls, uConexao, Orcamento.Model.Conexao,
+  Vcl.Menus, Orcamento.View.TelaConfiguracao, VCLTee.TeCanvas, VCLTee.TeePenDlg,
+  System.ImageList, Vcl.ImgList;
+
+type
+  TfrmLogin = class(TForm)
+    btnEntrar: TButton;
+    edtUsuario: TEdit;
+    edtSenha: TEdit;
+    menuDatabase: TButtonPen;
+    imgList: TImageList;
+    procedure btnEntrarClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure menuDatabaseClick(Sender: TObject);
+    procedure edtUsuarioKeyPress(Sender: TObject; var Key: Char);
+    procedure edtSenhaKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmLogin: TfrmLogin;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmLogin.btnEntrarClick(Sender: TObject);
+begin
+if (edtUsuario.Text = '') or (edtSenha.Text = '')	 then
+  MessageDlg('Informe usuário e senha!', mtWarning, [mbOk], 0)
+  else
+  begin
+    try
+      LoginUser(edtUsuario.Text, edtSenha.Text);
+
+    if dmDados.fdConnection.Connected then
+    begin
+      Close;
+    end;
+  except on e: Exception do
+  begin
+    MessageDlg('Não foi possível conectar. Verifique as configurações!', mtWarning, [mbOk], 0);
+  end;
+  end;
+  end;
+end;
+
+procedure TfrmLogin.edtUsuarioKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    edtSenha.SetFocus;
+  end;
+end;
+
+procedure TfrmLogin.edtSenhaKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    btnEntrarClick(Sender);
+  end;
+end;
+
+procedure TfrmLogin.FormShow(Sender: TObject);
+begin
+  edtUsuario.SetFocus;
+end;
+
+procedure TfrmLogin.menuDatabaseClick(Sender: TObject);
+begin
+  frmConfig := TFrmConfig.Create(nil);
+    try
+      frmConfig.ShowModal();
+    finally
+      FreeAndNil(frmConfig);
+end;
+end;
+end.

@@ -6,15 +6,19 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, Vcl.ExtCtrls, uConexao, Orcamento.Model.Conexao,
   Vcl.Menus, Orcamento.View.TelaConfiguracao, VCLTee.TeCanvas, VCLTee.TeePenDlg,
-  System.ImageList, Vcl.ImgList;
+  System.ImageList, Vcl.ImgList, Vcl.Imaging.pngimage, Vcl.Buttons;
 
 type
   TfrmLogin = class(TForm)
     btnEntrar: TButton;
     edtUsuario: TEdit;
     edtSenha: TEdit;
-    menuDatabase: TButtonPen;
     imgList: TImageList;
+    imgAudit: TImage;
+    pnlButtonDatabase: TPanel;
+    menuConfigDatabase: TMainMenu;
+    BancodeDados: TMenuItem;
+    menuDatabase: TMenuItem;
     procedure btnEntrarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure menuDatabaseClick(Sender: TObject);
