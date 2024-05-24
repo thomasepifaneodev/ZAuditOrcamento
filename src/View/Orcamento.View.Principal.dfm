@@ -13,7 +13,6 @@ object frmPrincipal: TfrmPrincipal
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poScreenCenter
-  WindowState = wsMaximized
   OnCreate = FormCreate
   OnResize = FormResize
   OnShow = FormShow
@@ -42,8 +41,7 @@ object frmPrincipal: TfrmPrincipal
       ParentBackground = False
       TabOrder = 0
       StyleName = 'Windows'
-      ExplicitTop = 622
-      ExplicitWidth = 1060
+      ExplicitTop = 626
       object pnlButtonBuscar: TPanel
         AlignWithMargins = True
         Left = 10
@@ -215,6 +213,7 @@ object frmPrincipal: TfrmPrincipal
           ParentFont = False
           TabOrder = 0
           Text = ''
+          TextHint = 'Data Inicial'
           OnEnter = edtDataInicialEnter
           OnExit = edtDataInicialExit
           OnKeyPress = edtDataInicialKeyPress
@@ -246,6 +245,7 @@ object frmPrincipal: TfrmPrincipal
           ParentFont = False
           TabOrder = 1
           Text = ''
+          TextHint = 'Data Final'
           OnEnter = edtDataFinalEnter
           OnExit = edtDataFinalExit
           OnKeyPress = edtDataFinalKeyPress
@@ -254,7 +254,7 @@ object frmPrincipal: TfrmPrincipal
       object pnlBusca: TPanel
         Left = 0
         Top = 0
-        Width = 700
+        Width = 585
         Height = 97
         Align = alLeft
         BevelOuter = bvNone
@@ -274,6 +274,33 @@ object frmPrincipal: TfrmPrincipal
           Text = ''
           TextHint = 'Buscar pelo c'#243'digo do or'#231'amento'
           OnChange = edtSourceChange
+          OnKeyPress = edtSourceKeyPress
+        end
+      end
+      object pnlRegistros: TPanel
+        Left = 585
+        Top = 0
+        Width = 158
+        Height = 97
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 2
+        ExplicitLeft = 566
+        ExplicitWidth = 177
+        object lblQuantidadeReg: TLabel
+          Left = 4
+          Top = 58
+          Width = 148
+          Height = 21
+          Align = alCustom
+          Caption = 'Total de Registros: 0'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI Semibold'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Layout = tlCenter
         end
       end
     end

@@ -12,7 +12,7 @@ uses
   Datasnap.DBClient, FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool,
   FireDAC.Phys, FireDAC.Phys.PG, FireDAC.Phys.PGDef, FireDAC.VCLUI.Wait, Orcamento.Model.Conexao,
   Orcamento.View.TelaConfiguracao, Orcamento.View.TelaLogin, uLib, uConexao,
-  Vcl.Mask, System.ImageList, Vcl.ImgList;
+  Vcl.Mask, System.ImageList, Vcl.ImgList, Vcl.ComCtrls;
 
 type
   TfrmPrincipal = class(TForm)
@@ -34,6 +34,8 @@ type
     imgList: TImageList;
     pnlBusca: TPanel;
     edtSource: TMaskEdit;
+    pnlRegistros: TPanel;
+    lblQuantidadeReg: TLabel;
     procedure btnBuscarClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -47,6 +49,7 @@ type
     procedure edtSourceChange(Sender: TObject);
     procedure btnExportClick(Sender: TObject);
     procedure btnSairClick(Sender: TObject);
+    procedure edtSourceKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     procedure ExportFiltro(const xCaracter: String);
@@ -70,18 +73,15 @@ begin
   end
   else
   begin
-    if MessageDlg('A consulta será efetuada no intervalo de datas ' + edtDataInicial.Text + ' a ' + edtDataFinal.Text, TMsgDlgType.mtConfirmation, mbOKCancel, 0) = MB_OKCANCEL then
     begin
       dmDados.ConsultaOrcamento(edtDataInicial.Text, edtDataFinal.Text);
       AutoFitDBGridColumns(dbGridPrincipal);
       edtSource.Visible := True;
+      lblQuantidadeReg.Caption := 'Total de Registros: ' + dbGridPrincipal.DataSource.DataSet.RecordCount.ToString();
     end
-    else
-    begin
-      edtDataFinal.SetFocus;
-    end;
   end;
 end;
+
 
 procedure TfrmPrincipal.edtDataInicialEnter(Sender: TObject);
 begin
@@ -123,12 +123,22 @@ begin
   if FilterValue = '' then
   begin
     dmDados.fdQueryOrcamento.Filtered := False;
+    lblQuantidadeReg.Caption := 'Total de Registros: ' + dbGridPrincipal.DataSource.DataSet.RecordCount.ToString();
   end
   else
   begin
-    dmDados.fdQueryOrcamento.Filter := Format('codorcamento LIKE ''%s''', ['%' + FilterValue + '%']);
+    dmDados.fdQueryOrcamento.Filter := 'codorcamento = ' + FilterValue ;
     dmDados.fdQueryOrcamento.Filtered := True;
+    lblQuantidadeReg.Caption := 'Total de Registros: ' + dbGridPrincipal.DataSource.DataSet.RecordCount.ToString();
   end;
+end;
+
+procedure TfrmPrincipal.edtSourceKeyPress(Sender: TObject; var Key: Char);
+begin
+if Key = #13 then
+ begin
+   edtDataInicial.SetFocus;
+ end;
 end;
 
 procedure TfrmPrincipal.ExportFiltro(const xCaracter: String);
@@ -237,6 +247,7 @@ begin
     end;
 end;
 
+
 procedure TfrmPrincipal.FormResize(Sender: TObject);
 begin
   AutoFitDBGridColumns(dbGridPrincipal);
@@ -244,6 +255,10 @@ end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);
 begin
-  edtDataInicial.SetFocus;
+  edtSource.SetFocus;
+  edtDataInicial.Text := DateToStr(Now()).Replace('/','');
+  edtDataFinal.Text := DateToStr(Now()).Replace('/','');
+  edtDataInicial.EditMask := '!99/99/0000;1;_';
+  edtDataFinal.EditMask := '!99/99/0000;1;_';
 end;
 end.

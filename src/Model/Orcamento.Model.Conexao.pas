@@ -16,7 +16,6 @@ type
     fdPgLink: TFDPhysPgDriverLink;
     fdConnection: TFDConnection;
     fdCreateFunction: TFDCommand;
-    procedure DataModuleCreate(Sender: TObject);
 
   private
     { Private declarations }
@@ -45,19 +44,16 @@ begin
     fdCreateFunction.Open();
 
     fdQueryOrcamento.SQL.Clear;
-    fdQueryOrcamento.SQL.Text := 'SELECT * FROM orcamentosexcluidos('+ '''' + DatInicial + '''' + ', ' + '''' + DatFinal + ''''+ ') ORDER BY codorcamento;';
+    fdQueryOrcamento.SQL.Add('SELECT codorcamento, codproduto, nome, qtde, valorunitario, valortotal');
+    fdQueryOrcamento.SQL.Add('FROM orcamentosexcluidos('+ '''' + DatInicial + '''' + ', ' + '''' + DatFinal + ''''+ ') ORDER BY codorcamento;');
     fdQueryOrcamento.Open();
   except on e : Exception do
   begin
-    ShowMessage(e.Message);
+    if e.Message.Contains('date/time field value out of range') then
+      MessageDlg('Data inválida!', mtWarning, [mbOK], 0)
+    else
+      MessageDlg(e.Message, mtWarning, [mbOK], 0);
   end;
   end;
 end;
-
-procedure TdmDados.DataModuleCreate(Sender: TObject);
-begin
-  fdConnection.ResourceOptions.CmdExecMode := amBlocking;
-  fdConnection.ResourceOptions.SilentMode := True;
-end;
-
 end.

@@ -1,9 +1,10 @@
 object dmDados: TdmDados
-  OnCreate = DataModuleCreate
   Height = 393
   Width = 518
   object fdQueryOrcamento: TFDQuery
     Connection = fdConnection
+    FetchOptions.AssignedValues = [evRowsetSize]
+    FetchOptions.RowsetSize = 10000000
     SQL.Strings = (
       '')
     Left = 299
