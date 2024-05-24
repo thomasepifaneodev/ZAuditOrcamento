@@ -107,10 +107,39 @@ end;
 
 procedure TfrmPrincipal.edtDataInicialKeyPress(Sender: TObject; var Key: Char);
 begin
-  if Key = #13 then
+  if (Key = #13) or (Key = #45) then
   begin
-    edtDataFinal.Text := '';
     edtDataFinal.SetFocus;
+    edtDataFinal.SelectAll;
+  end;
+end;
+
+procedure TfrmPrincipal.edtDataFinalEnter(Sender: TObject);
+begin
+  edtDataFinal.EditMask := '';
+  edtDataFinal.MaxLength := 8;
+  edtDataFinal.NumbersOnly := True
+end;
+
+procedure TfrmPrincipal.edtDataFinalExit(Sender: TObject);
+begin
+  if edtDataFinal.GetTextLen = 8 then
+  begin
+    edtDataFinal.EditMask := '!99/99/0000;1;_';
+  end
+  else
+  begin
+    if edtDataFinal.GetTextLen <> 8 then
+    MessageDlg('Data final não informada ou inválida, preencha corretamente!', mtInformation, [mbOk], 0);
+    edtDataFinal.SetFocus;
+  end;
+end;
+
+procedure TfrmPrincipal.edtDataFinalKeyPress(Sender: TObject; var Key: Char);
+begin
+  if (Key = #13) or (Key = #45) then
+  begin
+    edtSource.SetFocus;
   end;
 end;
 
@@ -135,9 +164,10 @@ end;
 
 procedure TfrmPrincipal.edtSourceKeyPress(Sender: TObject; var Key: Char);
 begin
-if Key = #13 then
+if (Key = #13) or (Key = #45) then
  begin
    edtDataInicial.SetFocus;
+   edtDataInicial.SelectAll;
  end;
 end;
 
@@ -182,36 +212,6 @@ procedure TfrmPrincipal.btnSairClick(Sender: TObject);
 begin
   if MessageDlg('Deseja realmente fechar a aplicação?', mtWarning, mbYesNo, 0) = IDYES then
   Application.Terminate;
-end;
-
-procedure TfrmPrincipal.edtDataFinalEnter(Sender: TObject);
-begin
-  edtDataFinal.EditMask := '';
-  edtDataFinal.MaxLength := 8;
-  edtDataFinal.NumbersOnly := True
-end;
-
-procedure TfrmPrincipal.edtDataFinalExit(Sender: TObject);
-begin
-  if edtDataFinal.GetTextLen = 8 then
-  begin
-    edtDataFinal.EditMask := '!99/99/0000;1;_';
-  end
-  else
-  begin
-    if edtDataFinal.GetTextLen <> 8 then
-    MessageDlg('Data final não informada ou inválida, preencha corretamente!', mtInformation, [mbOk], 0);
-    edtDataFinal.SetFocus;
-  end;
-
-end;
-
-procedure TfrmPrincipal.edtDataFinalKeyPress(Sender: TObject; var Key: Char);
-begin
-  if Key = #13 then
-  begin
-    pnlButtonBuscar.SetFocus;
-  end;
 end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);

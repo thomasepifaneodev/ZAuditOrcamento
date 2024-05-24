@@ -41,7 +41,8 @@ object frmPrincipal: TfrmPrincipal
       ParentBackground = False
       TabOrder = 0
       StyleName = 'Windows'
-      ExplicitTop = 626
+      ExplicitTop = 622
+      ExplicitWidth = 1060
       object pnlButtonBuscar: TPanel
         AlignWithMargins = True
         Left = 10
@@ -191,6 +192,7 @@ object frmPrincipal: TfrmPrincipal
           Top = 49
           Width = 116
           Height = 30
+          TabStop = False
           BevelOuter = bvNone
           BorderStyle = bsNone
           Color = clScrollBar
@@ -223,6 +225,7 @@ object frmPrincipal: TfrmPrincipal
           Top = 49
           Width = 118
           Height = 30
+          TabStop = False
           AutoSelect = False
           BevelOuter = bvNone
           BorderStyle = bsNone
@@ -263,7 +266,8 @@ object frmPrincipal: TfrmPrincipal
           Left = 10
           Top = 49
           Width = 550
-          Height = 30
+          Height = 33
+          TabStop = False
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
           Font.Height = -19
@@ -285,8 +289,7 @@ object frmPrincipal: TfrmPrincipal
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 2
-        ExplicitLeft = 566
-        ExplicitWidth = 177
+        ExplicitWidth = 154
         object lblQuantidadeReg: TLabel
           Left = 4
           Top = 58
@@ -331,6 +334,7 @@ object frmPrincipal: TfrmPrincipal
         Margins.Top = 10
         Margins.Right = 10
         Margins.Bottom = 10
+        TabStop = False
         Align = alClient
         Color = clMedGray
         DataSource = dataSource
