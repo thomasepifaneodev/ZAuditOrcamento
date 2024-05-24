@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, Vcl.ExtCtrls, uLib, uConexao;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, Vcl.ExtCtrls, uLib, uConexao,
+  System.ImageList, Vcl.ImgList;
 
 type
   TfrmConfig = class(TForm)
@@ -12,6 +13,7 @@ type
     lblPorta: TLabeledEdit;
     lblBase: TLabeledEdit;
     btnSalvarConfig: TButton;
+    imgList: TImageList;
     procedure btnSalvarConfigClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure lblIpKeyPress(Sender: TObject; var Key: Char);

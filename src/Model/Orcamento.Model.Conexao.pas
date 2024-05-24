@@ -8,7 +8,7 @@ uses
   FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Phys.PGDef,
   FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys,
   FireDAC.Phys.PG, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client,
-  FireDAC.Comp.DataSet, Vcl.Dialogs;
+  FireDAC.Comp.DataSet, Vcl.Dialogs, Vcl.Forms, Vcl.Controls;
 
 type
   TdmDados = class(TDataModule)
@@ -16,12 +16,12 @@ type
     fdPgLink: TFDPhysPgDriverLink;
     fdConnection: TFDConnection;
     fdCreateFunction: TFDCommand;
+    procedure DataModuleCreate(Sender: TObject);
 
   private
     { Private declarations }
   public
     procedure ConsultaOrcamento(DatInicial, DatFinal:  string);
-    procedure ConsultaOrcamentoGeral();
     { Public declarations }
 
   end;
@@ -40,7 +40,6 @@ implementation
 { TdmDados }
 
 procedure TdmDados.ConsultaOrcamento(DatInicial, DatFinal:  string);
-
 begin
   try
     fdCreateFunction.Open();
@@ -48,29 +47,17 @@ begin
     fdQueryOrcamento.SQL.Clear;
     fdQueryOrcamento.SQL.Text := 'SELECT * FROM orcamentosexcluidos('+ '''' + DatInicial + '''' + ', ' + '''' + DatFinal + ''''+ ') ORDER BY codorcamento;';
     fdQueryOrcamento.Open();
-
   except on e : Exception do
   begin
     ShowMessage(e.Message);
   end;
   end;
-
 end;
 
-procedure TdmDados.ConsultaOrcamentoGeral;
+procedure TdmDados.DataModuleCreate(Sender: TObject);
 begin
-try
-    fdCreateFunction.Open();
-
-    fdQueryOrcamento.SQL.Clear;
-    fdQueryOrcamento.SQL.Text := 'SELECT * FROM orcamentosexcluidos((SELECT MIN(data) FROM vauditoria), (SELECT MAX(data) FROM vauditoria))';
-    fdQueryOrcamento.Open();
-
-  except on e : Exception do
-  begin
-    ShowMessage(e.Message);
-  end;
-  end;
+  fdConnection.ResourceOptions.CmdExecMode := amBlocking;
+  fdConnection.ResourceOptions.SilentMode := True;
 end;
 
 end.

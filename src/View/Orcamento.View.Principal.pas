@@ -33,7 +33,7 @@ type
     edtDataFinal: TLabeledEdit;
     imgList: TImageList;
     pnlBusca: TPanel;
-    edtSource: TEdit;
+    edtSource: TMaskEdit;
     procedure btnBuscarClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -44,8 +44,12 @@ type
     procedure edtDataFinalExit(Sender: TObject);
     procedure edtDataInicialKeyPress(Sender: TObject; var Key: Char);
     procedure edtDataFinalKeyPress(Sender: TObject; var Key: Char);
+    procedure edtSourceChange(Sender: TObject);
+    procedure btnExportClick(Sender: TObject);
+    procedure btnSairClick(Sender: TObject);
   private
     { Private declarations }
+    procedure ExportFiltro(const xCaracter: String);
   public
     { Public declarations }
   end;
@@ -110,6 +114,66 @@ begin
   end;
 end;
 
+procedure TfrmPrincipal.edtSourceChange(Sender: TObject);
+var
+  FilterValue: string;
+begin
+  FilterValue := edtSource.Text;
+
+  if FilterValue = '' then
+  begin
+    dmDados.fdQueryOrcamento.Filtered := False;
+  end
+  else
+  begin
+    dmDados.fdQueryOrcamento.Filter := Format('codorcamento LIKE ''%s''', ['%' + FilterValue + '%']);
+    dmDados.fdQueryOrcamento.Filtered := True;
+  end;
+end;
+
+procedure TfrmPrincipal.ExportFiltro(const xCaracter: String);
+var
+  I : Integer;
+  xArquivoTxt : TStringList;
+  xLinhaCompleta, DesktopPath : String;
+begin
+  xArquivoTxt := TStringList.Create;
+  while not dbGridPrincipal.DataSource.DataSet.Eof do
+  begin
+    xLinhaCompleta := '';
+  for I := 0 to dbGridPrincipal.Columns.Count - 1 do
+  begin
+    xLinhaCompleta := xLinhaCompleta +
+    dbGridPrincipal.Columns[I].Field.AsString + xCaracter;
+  end;
+   dbGridPrincipal.DataSource.DataSet.Next;
+   xArquivoTxt.Add(xLinhaCompleta);
+end;
+  DesktopPath := ExtractFilePath(Application.ExeName) + 'Arquivos Exportados';
+  if not DirectoryExists (DesktopPath) then
+  ForceDirectories(DesktopPath);
+
+  xArquivoTxt.SaveToFile(DesktopPath + '\arquivo.csv');
+end;
+
+procedure TfrmPrincipal.btnExportClick(Sender: TObject);
+begin
+  if dmDados.fdQueryOrcamento.RecordCount <= 0 then
+    MessageDlg('Sem dados para exportar!', TMsgDlgType.mtInformation, [mbOK], 0)
+  else
+  try
+    ExportFiltro(';');
+  finally
+    MessageDlg('Dados exportados com sucesso!', TMsgDlgType.mtInformation, [mbOK], 0)
+  end;
+end;
+
+procedure TfrmPrincipal.btnSairClick(Sender: TObject);
+begin
+  if MessageDlg('Deseja realmente fechar a aplicação?', mtWarning, mbYesNo, 0) = IDYES then
+  Application.Terminate;
+end;
+
 procedure TfrmPrincipal.edtDataFinalEnter(Sender: TObject);
 begin
   edtDataFinal.EditMask := '';
@@ -142,6 +206,7 @@ end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
+  edtSource.OnChange := edtSourceChange;
   if not ArquivoINIExiste(ExtractFilePath(Application.ExeName) + 'ZOrcamento.ini') then
   begin
     MessageDlg('Arquivo de configuração não encontrado!', mtWarning, [mbOk], 0);
@@ -180,6 +245,5 @@ end;
 procedure TfrmPrincipal.FormShow(Sender: TObject);
 begin
   edtDataInicial.SetFocus;
-  edtSource.Visible := False;
 end;
 end.

@@ -188,10 +188,10 @@ object frmLogin: TfrmLogin
     Stretch = True
   end
   object btnEntrar: TButton
-    Left = 100
+    Left = 90
     Top = 368
-    Width = 100
-    Height = 35
+    Width = 120
+    Height = 40
     Caption = 'Entrar'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText

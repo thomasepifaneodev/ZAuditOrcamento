@@ -1,0 +1,105 @@
+unit Orcamento.Model.Conexao;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Phys.PGDef,
+  FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys,
+  FireDAC.Phys.PG, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client,
+  FireDAC.Comp.DataSet, Vcl.Dialogs, Vcl.Forms, Vcl.Controls;
+
+type
+  TdmDados = class(TDataModule)
+    fdQueryOrcamento: TFDQuery;
+    fdPgLink: TFDPhysPgDriverLink;
+    fdConnection: TFDConnection;
+    fdCreateFunction: TFDCommand;
+    procedure DataModuleCreate(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    procedure ConsultaOrcamento(DatInicial, DatFinal:  string);
+    procedure ExportFiltroXML;
+    { Public declarations }
+
+  end;
+
+var
+  dmDados: TdmDados;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+{ TdmDados }
+
+{ TdmDados }
+
+procedure TdmDados.ConsultaOrcamento(DatInicial, DatFinal:  string);
+begin
+  try
+    fdCreateFunction.Open();
+
+    fdQueryOrcamento.SQL.Clear;
+    fdQueryOrcamento.SQL.Text := 'SELECT * FROM orcamentosexcluidos('+ '''' + DatInicial + '''' + ', ' + '''' + DatFinal + ''''+ ') ORDER BY codorcamento;';
+    fdQueryOrcamento.Open();
+  except on e : Exception do
+  begin
+    ShowMessage(e.Message);
+  end;
+  end;
+end;
+
+
+procedure TdmDados.ExportFiltroXML;
+var
+  i: Integer;
+  XMLStream: TStringStream;
+  XMLFileName, DesktopPath: string;
+  StringXML : string;
+begin
+  if (fdQueryOrcamento.RecordCount > 0) then
+  begin
+    DesktopPath := ExtractFilePath(Application.ExeName) + 'XMLInutilizacao\';
+    if not DirectoryExists (DesktopPath) then
+    ForceDirectories(DesktopPath);
+
+    fdQueryOrcamento.First;
+    while not fdQueryOrcamento.Eof do
+    begin
+      StringXML := fdQueryOrcamento.FieldByName('arqxml').AsString;
+
+      XMLStream := TStringStream.Create(StringXML, TEncoding.UTF8);
+
+      try
+        XMLFileName := DesktopPath + 'xmlInutilizacao_' +
+        'modelo_' + fdQueryOrcamento.FieldByName('modelonf_codigo').AsString +
+        '_serie_' + fdQueryOrcamento.FieldByName('serie').AsString +
+        '_numero_' + fdQueryOrcamento.FieldByName('numeroinicial').AsString +'.xml';
+
+        XMLStream.SaveToFile(XMLFileName);
+
+      finally
+        XMLStream.Free;
+      end;
+
+      fdQueryOrcamento.Next;
+    end;
+    MessageDlg('XML s exportados com sucesso!', mtInformation, [mbOk], 0);
+  end
+  else
+    MessageDlg('Nenhum registro encontrado para exportar.', mtWarning, [mbOk], 0);
+end;
+
+procedure TdmDados.DataModuleCreate(Sender: TObject);
+begin
+  fdConnection.ResourceOptions.CmdExecMode := amBlocking;
+  fdConnection.ResourceOptions.SilentMode := True;
+end;
+
+end.

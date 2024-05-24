@@ -86,6 +86,6 @@ begin
       frmConfig.ShowModal();
     finally
       FreeAndNil(frmConfig);
-end;
+    end;
 end;
 end.

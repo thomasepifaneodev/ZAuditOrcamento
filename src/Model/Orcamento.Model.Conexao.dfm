@@ -1,4 +1,5 @@
 object dmDados: TdmDados
+  OnCreate = DataModuleCreate
   Height = 393
   Width = 518
   object fdQueryOrcamento: TFDQuery
