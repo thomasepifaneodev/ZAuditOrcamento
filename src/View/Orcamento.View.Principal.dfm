@@ -291,15 +291,16 @@ object frmPrincipal: TfrmPrincipal
         TabOrder = 2
         ExplicitWidth = 154
         object lblQuantidadeReg: TLabel
-          Left = 4
-          Top = 58
-          Width = 148
-          Height = 21
+          Left = 0
+          Top = 56
+          Width = 152
+          Height = 17
           Align = alCustom
+          AutoSize = False
           Caption = 'Total de Registros: 0'
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
-          Font.Height = -16
+          Font.Height = -13
           Font.Name = 'Segoe UI Semibold'
           Font.Style = [fsBold]
           ParentFont = False
